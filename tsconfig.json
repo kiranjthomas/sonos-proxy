@@ -1,0 +1,11 @@
+{
+  "extends": "@tsconfig/node14/tsconfig.json",
+  "compilerOptions": {
+    "strictNullChecks": true,
+    "skipLibCheck": false, // https://www.typescriptlang.org/tsconfig#skipDefaultLibCheck
+    "incremental": true,
+    "sourceMap": true, // https://www.typescriptlang.org/tsconfig#baseUrl
+    "baseUrl": ".", // https://www.typescriptlang.org/tsconfig#baseUrl
+    "outDir": "./dist",
+  },
+}
