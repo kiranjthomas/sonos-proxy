@@ -13,6 +13,12 @@ interface SonosError extends Error {
   reason?: string;
 }
 
+interface Data {
+  playlistId?: string;
+  playOnCompletion?: boolean;
+  action?: string;
+}
+
 export async function playPauseSonos(
   token: string,
   room: string
@@ -36,9 +42,40 @@ export async function playPauseSonos(
   return result;
 }
 
+export async function loadPlaylist(
+  token: string,
+  room: string
+): Promise<AxiosResponse | undefined> {
+  const loadPlaylist = `groups/${room}/playlists`;
+  let result;
+
+  const data = {
+    playlistId: "4",
+    playOnCompletion: true,
+    action: "replace",
+  };
+
+  try {
+    result = await postAxios(
+      `https://${host}/${path}/${loadPlaylist}`,
+      token,
+      data
+    );
+  } catch (err) {
+    const cause = err as SonosError;
+    throw new VError(
+      { name: "loadPlaylist", cause },
+      "Error loading playlist Sonos play"
+    );
+  }
+
+  return result;
+}
+
 async function postAxios(
   url: string,
-  token: string
+  token: string,
+  data?: Data
 ): Promise<AxiosResponse | undefined> {
   let result;
 
@@ -49,6 +86,7 @@ async function postAxios(
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
+      data,
     });
   } catch (err) {
     const cause = err as AxiosError;
