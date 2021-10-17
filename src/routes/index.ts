@@ -53,8 +53,7 @@ function getAccessToken(): Koa.Middleware {
   };
 }
 
-router.get("/healthy", async (ctx) => {
-  console.log("WTF!!");
+router.get("/health", async (ctx) => {
   ctx.body = { message: "healthy" };
 });
 

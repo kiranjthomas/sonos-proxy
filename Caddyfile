@@ -1,4 +1,12 @@
+(logging) {
+    log {
+        output stdout
+    }
+}
+
 localhost:5000 {
+  import logging
+
   tls internal
 
   reverse_proxy sonos-proxy:5001

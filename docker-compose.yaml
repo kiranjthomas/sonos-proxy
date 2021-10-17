@@ -31,6 +31,8 @@ services:
       #   - port: 7000
       START_NODE_OPTIONS: >-
         --enable-source-maps --unhandled-rejections=strict
+    volumes:
+      - ./src:/usr/src/app/src
 
     ports:
       - 5001:5001
