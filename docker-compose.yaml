@@ -11,7 +11,7 @@ services:
       - caddy_data:/data/caddy
       - "./Caddyfile:/etc/caddy/Caddyfile"
   redis:
-    image: redis
+    image: redis:4-alpine
     ports:
       - "6379:6379"
     volumes:
