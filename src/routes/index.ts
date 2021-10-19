@@ -94,7 +94,7 @@ router.get("/loadPlaylist", getAccessToken(), async (ctx) => {
     return;
   }
 
-  ctx.body = { message: "successfully toggled play/pause endpoint" };
+  ctx.body = { message: "successfully loaded playlist" };
 });
 
 router.get("/authorize", async (ctx) => {
