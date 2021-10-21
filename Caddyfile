@@ -9,5 +9,5 @@ localhost:5000 {
 
   tls internal
 
-  reverse_proxy sonos-proxy:5001
+  reverse_proxy server:5001
 }

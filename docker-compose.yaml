@@ -4,7 +4,7 @@ services:
     image: caddy
     restart: always
     depends_on:
-      - sonos-proxy
+      - server
     ports:
       - "5000:5000"
     volumes:
@@ -16,7 +16,7 @@ services:
       - "6379:6379"
     volumes:
       - redis_data:/data
-  sonos-proxy:
+  server:
     image: sonos-proxy:server
     build:
       context: .
@@ -25,17 +25,13 @@ services:
     command: npm start
     environment:
       NODE_ENV: development
-      # AWS_REGION: us-east-1
-      # REDIS_CONFIG: |
-      #   - host: redis
-      #   - port: 7000
       START_NODE_OPTIONS: >-
-        --enable-source-maps --unhandled-rejections=strict
+        --enable-source-maps --unhandled-rejections=strict --inspect=0.0.0.0:9229
     volumes:
       - ./src:/usr/src/app/src
-
     ports:
       - 5001:5001
+      - 9229:9229
 volumes:
   caddy_data:
   redis_data:

@@ -3,3 +3,8 @@ sonos:
   clientSecret: ~
   livingRoomGroupId: ~
   play3GroupId: ~
+
+auth:
+  tokenHost: https://api.sonos.com
+  tokenPath: login/v3/oauth/access
+  authorizePath: login/v3/oauth
