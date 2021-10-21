@@ -17,10 +17,10 @@ interface ConfigInterface {
 class Config {
   public readonly config: ConfigInterface = {
     sonos: {
-      id: "",
-      secret: "",
-      livingRoomGroupId: "",
-      play3GroupId: "",
+      id: config.get("sonos.clientId"),
+      secret: config.get("sonos.clientSecret"),
+      livingRoomGroupId: config.get("sonos.livingRoomGroupId"),
+      play3GroupId: config.get("sonos.play3GroupId"),
     },
     auth: {
       tokenHost: config.get("auth.tokenHost"),
