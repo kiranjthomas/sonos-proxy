@@ -5,11 +5,12 @@ import redistClient from "../clients/redis";
 import appConfig from "../util/config";
 import { playPauseSonos, loadPlaylist, getGroups } from "../util/sonos-api";
 import getAccessToken from "../middlewares/get-access-token";
+import getRooms from "../middlewares/get-rooms";
 
 export const controlRouter = new Router();
 // const redis = new Redis({ host: "redis" });
 
-controlRouter.get("/getGroupId", getAccessToken(), async (ctx) => {
+controlRouter.get("/getGroups", getAccessToken(), async (ctx) => {
   const {
     accessToken: {
       token: { access_token },
@@ -19,9 +20,6 @@ controlRouter.get("/getGroupId", getAccessToken(), async (ctx) => {
   const { householdsId } = JSON.parse(
     (await redistClient.get("householdsId")) || ""
   );
-
-  // eslint-disable-next-line no-debugger
-  debugger;
 
   let result;
   try {
@@ -34,59 +32,71 @@ controlRouter.get("/getGroupId", getAccessToken(), async (ctx) => {
     return;
   }
 
-  if (result) {
-    const {
-      data: { groups },
-    } = result;
+  const {
+    data: { groups },
+  } = result;
 
-    // if (groups.some((group) => group.name === 'Living'))
-  }
+  groups.forEach((group) =>
+    redistClient.set(group.name, JSON.stringify(group))
+  );
 
   ctx.body = {
     message: "successfully got groupId",
-    result,
+    groups: result.data?.groups,
   };
 });
 
-controlRouter.get("/togglePlayPause", getAccessToken(), async (ctx) => {
-  const {
-    accessToken: {
-      token: { access_token },
-    },
-  } = ctx.state;
+controlRouter.get(
+  "/togglePlayPause",
+  getAccessToken(),
+  getRooms(),
+  async (ctx) => {
+    const {
+      accessToken: {
+        token: { access_token },
+      },
+      livingRoomGroup,
+    } = ctx.state;
 
-  try {
-    await playPauseSonos(access_token, appConfig.sonos.livingRoomGroupId);
-  } catch (err) {
-    const cause = err as VError;
-    const info = VError.info(cause);
-    ctx.body = info.statusText;
-    ctx.status = info.status;
-    return;
+    try {
+      await playPauseSonos(access_token, livingRoomGroup.id);
+    } catch (err) {
+      const cause = err as VError;
+      const info = VError.info(cause);
+      ctx.body = { message: info.statusText };
+      ctx.status = info.status;
+      return;
+    }
+
+    ctx.body = { message: "successfully toggled play/pause endpoint" };
   }
+);
 
-  ctx.body = { message: "successfully toggled play/pause endpoint" };
-});
+controlRouter.get(
+  "/loadPlaylist",
+  getAccessToken(),
+  getRooms(),
+  async (ctx) => {
+    const {
+      accessToken: {
+        token: { access_token },
+      },
+      livingRoomGroup,
+    } = ctx.state;
 
-controlRouter.get("/loadPlaylist", getAccessToken(), async (ctx) => {
-  const {
-    accessToken: {
-      token: { access_token },
-    },
-  } = ctx.state;
+    try {
+      await loadPlaylist(access_token, livingRoomGroup.id);
+    } catch (err) {
+      const cause = err as VError;
+      const info = VError.info(cause);
+      ctx.body = { message: info.statusText };
+      ctx.status = info.status;
+      return;
+    }
 
-  try {
-    await loadPlaylist(access_token, appConfig.sonos.livingRoomGroupId);
-  } catch (err) {
-    const cause = err as VError;
-    const info = VError.info(cause);
-    ctx.body = info.statusText;
-    ctx.status = info.status;
-    return;
+    ctx.body = { message: "successfully loaded playlist" };
   }
-
-  ctx.body = { message: "successfully loaded playlist" };
-});
+);
 
 // controlRouter.get("/getAccessToken", getAccessToken(), async (ctx) => {
 //   const {
