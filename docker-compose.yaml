@@ -12,12 +12,14 @@ services:
       - "./Caddyfile:/etc/caddy/Caddyfile"
   redis:
     image: redis:4-alpine
+    restart: always
     ports:
       - "6379:6379"
     volumes:
       - redis_data:/data
   server:
     image: sonos-proxy:server
+    restart: always
     build:
       context: .
     depends_on:
