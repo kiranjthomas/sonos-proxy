@@ -73,7 +73,7 @@ controlRouter.get(
 );
 
 controlRouter.get(
-  "/loadPlaylist",
+  "/loadPlaylist/:room",
   getAccessToken(),
   getRooms(),
   async (ctx) => {
@@ -82,10 +82,14 @@ controlRouter.get(
         token: { access_token },
       },
       livingRoomGroup,
+      bedroomGroup
     } = ctx.state;
 
+    let roomId;
+
+    roomId = ctx.params.room === 'LivingRoom' ? livingRoomGroup.id : bedroomGroup.id
     try {
-      await loadPlaylist(access_token, livingRoomGroup.id);
+      await loadPlaylist(access_token, roomId);
     } catch (err) {
       const cause = err as VError;
       const info = VError.info(cause);
