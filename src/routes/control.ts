@@ -93,7 +93,7 @@ controlRouter.get(
       ctx.params.room === "LivingRoom" ? livingRoomGroup.id : bedroomGroup.id;
 
     try {
-      await setVolume(access_token, roomId);
+      await loadPlaylist(access_token, roomId);
     } catch (err) {
       const cause = err as VError;
       const info = VError.info(cause);
@@ -103,7 +103,7 @@ controlRouter.get(
     }
 
     try {
-      await loadPlaylist(access_token, roomId);
+      await setVolume(access_token, roomId);
     } catch (err) {
       const cause = err as VError;
       const info = VError.info(cause);
