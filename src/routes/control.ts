@@ -2,8 +2,12 @@ import Router from "koa-router";
 import VError from "verror";
 
 import redistClient from "../clients/redis";
-import appConfig from "../util/config";
-import { playPauseSonos, loadPlaylist, getGroups } from "../util/sonos-api";
+import {
+  playPauseSonos,
+  loadPlaylist,
+  getGroups,
+  setVolume,
+} from "../util/sonos-api";
 import getAccessToken from "../middlewares/get-access-token";
 import getRooms from "../middlewares/get-rooms";
 
@@ -82,12 +86,22 @@ controlRouter.get(
         token: { access_token },
       },
       livingRoomGroup,
-      bedroomGroup
+      bedroomGroup,
     } = ctx.state;
 
-    let roomId;
+    const roomId =
+      ctx.params.room === "LivingRoom" ? livingRoomGroup.id : bedroomGroup.id;
 
-    roomId = ctx.params.room === 'LivingRoom' ? livingRoomGroup.id : bedroomGroup.id
+    try {
+      await setVolume(access_token, roomId);
+    } catch (err) {
+      const cause = err as VError;
+      const info = VError.info(cause);
+      ctx.body = { message: info.statusText };
+      ctx.status = info.status;
+      return;
+    }
+
     try {
       await loadPlaylist(access_token, roomId);
     } catch (err) {
@@ -101,16 +115,3 @@ controlRouter.get(
     ctx.body = { message: "successfully loaded playlist" };
   }
 );
-
-// controlRouter.get("/getAccessToken", getAccessToken(), async (ctx) => {
-//   const {
-//     accessToken: {
-//       token: { access_token },
-//     },
-//   } = ctx.state;
-
-//   ctx.body = {
-//     message: "successfully toggled play/pause endpoint",
-//     accessToken: access_token,
-//   };
-// });

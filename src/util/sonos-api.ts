@@ -16,6 +16,7 @@ interface PostData {
   playlistId?: string;
   playOnCompletion?: boolean;
   action?: string;
+  volume?: string;
 }
 
 interface GroupData {
@@ -88,10 +89,32 @@ export async function loadPlaylist(
     );
   } catch (err) {
     const cause = err as SonosError;
-    throw new VError(
-      { name: "loadPlaylist", cause },
-      "Error loading playlist Sonos play"
+    throw new VError({ name: "loadPlaylist", cause }, "Error loading playlist");
+  }
+
+  return result;
+}
+
+export async function setVolume(
+  token: string,
+  room: string
+): Promise<AxiosResponse> {
+  const setVolume = `groups/${room}/groupVolume`;
+  let result;
+
+  const data = {
+    volume: "20",
+  };
+
+  try {
+    result = await postAxios(
+      `https://${host}/${path}/${setVolume}`,
+      token,
+      data
     );
+  } catch (err) {
+    const cause = err as SonosError;
+    throw new VError({ name: "setVolume", cause }, "Error setting volume");
   }
 
   return result;
