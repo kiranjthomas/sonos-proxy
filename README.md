@@ -12,7 +12,7 @@ Sonos allows users to play music on a Sonos speaker using the [Control API]. You
 
 ### Authorization [WIP]
 
-Sonos leverages three legged oauth to to [authorize] requests.
+Sonos leverages three legged oauth to [authorize] requests.
 
 ### Development Environment
 
