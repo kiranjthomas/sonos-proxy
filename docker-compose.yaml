@@ -19,7 +19,7 @@ services:
     volumes:
       - redis_data:/data
   server:
-    image: letmeupgradeya/sonos-proxy:server
+    image: sonos-proxy:server
     restart: always
     build:
       context: .
