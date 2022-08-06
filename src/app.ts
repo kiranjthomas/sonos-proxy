@@ -4,7 +4,6 @@ import serve from "koa-static";
 import mount from "koa-mount";
 
 import { oauthRouter, controlRouter, healthRouter } from "./routes";
-import { healthRouter } from "./routes";
 
 const app = new Koa();
 

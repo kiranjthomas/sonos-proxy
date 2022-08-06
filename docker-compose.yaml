@@ -33,6 +33,7 @@ services:
         --enable-source-maps --unhandled-rejections=strict --inspect=0.0.0.0:9229
     volumes:
       - ./src:/usr/src/app/src
+      - ./build/www/sonos-client:/usr/src/app/dist/sonos-client
     ports:
       - 5001:5001
       - 9229:9229
