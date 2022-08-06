@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon --watch config --watch src -e json,ts,yaml  --exec 'npx tsc && node ${START_NODE_OPTIONS:--inspect=0.0.0.0:9229 --unhandled-rejections=strict} dist/server.js'",
+    "start": "nodemon --watch config --watch src -e json,ts,yaml  --exec 'npx tsc && node ${START_NODE_OPTIONS} dist/server.js'",
     "build": "npm run clean && npm run compile",
     "compile": "tsc -d -p tsconfig.build.json",
     "clean": "rm -rf ./dist"
@@ -17,8 +17,10 @@
     "@types/config": "0.0.39",
     "@types/ioredis": "^4.27.4",
     "@types/koa": "^2.13.4",
-    "@types/koa__cors": "^3.3.0",
+    "@types/koa-mount": "^4.0.1",
     "@types/koa-router": "^7.4.4",
+    "@types/koa-static": "^4.0.2",
+    "@types/koa__cors": "^3.3.0",
     "@types/node": "^16.9.2",
     "@types/simple-oauth2": "^4.1.1",
     "@types/verror": "^1.10.5",
@@ -36,7 +38,9 @@
     "config": "^3.3.6",
     "ioredis": "^4.27.9",
     "koa": "^2.13.1",
+    "koa-mount": "^4.0.0",
     "koa-router": "^10.1.1",
+    "koa-static": "^5.0.0",
     "openid-client": "^4.8.0",
     "simple-oauth2": "^4.2.0",
     "verror": "^1.10.0"
