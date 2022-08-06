@@ -12,7 +12,7 @@ localhost:5000 {
   reverse_proxy server:5001
 }
 
-localhost:3000 {
+localhost:80 {
   import logging
 
   root * /var/www/sonos-client

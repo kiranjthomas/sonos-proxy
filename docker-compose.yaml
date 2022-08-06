@@ -1,12 +1,13 @@
 version: "3.6"
 services:
   sonos-proxy-caddy:
-    image: caddy
+    image: caddy:2.5.2-alpine
     restart: always
     depends_on:
       - server
     ports:
       - "5000:5000"
+      - "3000:80"
     volumes:
       - caddy_data:/data/caddy
       - "./Caddyfile:/etc/caddy/Caddyfile"
