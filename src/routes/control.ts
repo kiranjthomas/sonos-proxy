@@ -116,7 +116,7 @@ controlRouter.get(
 
     console.time('setVolume');
     try {
-      await setVolume(access_token, roomId);
+      setVolume(access_token, roomId);
     } catch (err) {
       const cause = err as VError;
       const info = VError.info(cause);
