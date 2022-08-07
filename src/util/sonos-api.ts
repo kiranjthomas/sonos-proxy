@@ -46,9 +46,9 @@ interface Player {
 
 export async function playPauseSonos(
   token: string,
-  room: string
+  roomId: string
 ): Promise<AxiosResponse> {
-  const playPauseEndpoint = `groups/${room}/playback/togglePlayPause`;
+  const playPauseEndpoint = `groups/${roomId}/playback/togglePlayPause`;
   let result;
 
   try {
@@ -69,9 +69,9 @@ export async function playPauseSonos(
 
 export async function loadPlaylist(
   token: string,
-  room: string
+  roomId: string
 ): Promise<AxiosResponse> {
-  const loadPlaylist = `groups/${room}/playlists`;
+  const loadPlaylist = `groups/${roomId}/playlists`;
   let result;
 
   // Revi Button playlist is 4; I assume playListId is stable.
@@ -79,7 +79,7 @@ export async function loadPlaylist(
     playlistId: "4",
     playOnCompletion: true,
     action: "replace",
-    playModes: { shuffle: true }
+    playModes: { shuffle: true },
   };
 
   try {
@@ -96,11 +96,39 @@ export async function loadPlaylist(
   return result;
 }
 
+export async function loadFavorite(
+  token: string,
+  roomId: string,
+  favoriteId: string
+): Promise<AxiosResponse> {
+  const loadFavorite = `groups/${roomId}/favorites`;
+  let result;
+
+  const data = {
+    favoriteId,
+    playOnCompletion: true,
+    action: "replace",
+  };
+
+  try {
+    result = await postAxios(
+      `https://${host}/${path}/${loadFavorite}`,
+      token,
+      data
+    );
+  } catch (err) {
+    const cause = err as SonosError;
+    throw new VError({ name: "loadFavorite", cause }, "Error loading favorite");
+  }
+
+  return result;
+}
+
 export async function setVolume(
   token: string,
-  room: string
+  roomId: string
 ): Promise<AxiosResponse> {
-  const setVolume = `groups/${room}/groupVolume`;
+  const setVolume = `groups/${roomId}/groupVolume`;
   let result;
 
   const data = {

@@ -6,6 +6,6 @@
     "incremental": true,
     "sourceMap": true, // https://www.typescriptlang.org/tsconfig#baseUrl
     "baseUrl": ".", // https://www.typescriptlang.org/tsconfig#baseUrl
-    "outDir": "./dist",
-  },
+    "outDir": "./dist"
+  }
 }

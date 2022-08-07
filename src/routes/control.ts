@@ -5,6 +5,7 @@ import redistClient from "../clients/redis";
 import {
   playPauseSonos,
   loadPlaylist,
+  loadFavorite,
   getGroups,
   setVolume,
 } from "../util/sonos-api";
@@ -113,5 +114,45 @@ controlRouter.get(
     }
 
     ctx.body = { message: "successfully loaded playlist" };
+  }
+);
+
+controlRouter.get(
+  "/loadFavorite/:room/:favoriteId",
+  getAccessToken(),
+  getRooms(),
+  async (ctx) => {
+    const {
+      accessToken: {
+        token: { access_token },
+      },
+      livingRoomGroup,
+      bedroomGroup,
+    } = ctx.state;
+
+    const { room, favoriteId } = ctx.params;
+    const roomId = room === "LivingRoom" ? livingRoomGroup.id : bedroomGroup.id;
+
+    try {
+      await loadFavorite(access_token, roomId, favoriteId);
+    } catch (err) {
+      const cause = err as VError;
+      const info = VError.info(cause);
+      ctx.body = { message: info.statusText };
+      ctx.status = info.status;
+      return;
+    }
+
+    try {
+      await setVolume(access_token, roomId);
+    } catch (err) {
+      const cause = err as VError;
+      const info = VError.info(cause);
+      ctx.body = { message: info.statusText };
+      ctx.status = info.status;
+      return;
+    }
+
+    ctx.body = { message: `successfully loaded favoriteId: ${favoriteId}` };
   }
 );

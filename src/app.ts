@@ -9,8 +9,8 @@ const app = new Koa();
 
 app.use(cors());
 
-console.log(`${__dirname}`)
-app.use(mount('/', serve(__dirname + '/sonos-client')))
+console.log(`${__dirname}`);
+app.use(mount("/", serve(__dirname + "/sonos-client")));
 
 app.use(healthRouter.routes());
 app.use(controlRouter.routes());
