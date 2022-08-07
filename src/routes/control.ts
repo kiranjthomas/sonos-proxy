@@ -122,6 +122,8 @@ controlRouter.get(
   getAccessToken(),
   getRooms(),
   async (ctx) => {
+    console.time('getAccessToken');
+    
     const {
       accessToken: {
         token: { access_token },
@@ -130,9 +132,12 @@ controlRouter.get(
       bedroomGroup,
     } = ctx.state;
 
+    console.timeEnd('getAccessToken');
+
     const { room, favoriteId } = ctx.params;
     const roomId = room === "LivingRoom" ? livingRoomGroup.id : bedroomGroup.id;
 
+    console.time('loadFavorite');
     try {
       await loadFavorite(access_token, roomId, favoriteId);
     } catch (err) {
@@ -143,6 +148,9 @@ controlRouter.get(
       return;
     }
 
+    console.timeEnd('loadFavorite');
+
+    console.time('setVolume');
     try {
       await setVolume(access_token, roomId);
     } catch (err) {
@@ -153,6 +161,8 @@ controlRouter.get(
       return;
     }
 
+    console.timeEnd('setVolume');
+    
     ctx.body = { message: `successfully loaded favoriteId: ${favoriteId}` };
   }
 );
