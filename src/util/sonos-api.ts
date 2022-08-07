@@ -69,14 +69,14 @@ export async function playPauseSonos(
 
 export async function loadPlaylist(
   token: string,
-  roomId: string
+  roomId: string,
+  playlistId: string
 ): Promise<AxiosResponse> {
   const loadPlaylist = `groups/${roomId}/playlists`;
   let result;
 
-  // Revi Button playlist is 4; I assume playListId is stable.
   const data = {
-    playlistId: "4",
+    playlistId,
     playOnCompletion: true,
     action: "replace",
     playModes: { shuffle: true },
