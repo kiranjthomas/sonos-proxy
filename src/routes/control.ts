@@ -78,10 +78,12 @@ controlRouter.get(
 );
 
 controlRouter.get(
-  "/loadPlaylist/:room",
+  "/loadPlaylist/:room/:playlistId",
   getAccessToken(),
   getRooms(),
   async (ctx) => {
+    console.time('getAccessToken');
+
     const {
       accessToken: {
         token: { access_token },
@@ -90,19 +92,29 @@ controlRouter.get(
       bedroomGroup,
     } = ctx.state;
 
-    const roomId =
-      ctx.params.room === "LivingRoom" ? livingRoomGroup.id : bedroomGroup.id;
+    console.timeEnd('getAccessToken');
+
+    const { room, playlistId } = ctx.params;
+    const roomId = room === "LivingRoom" ? livingRoomGroup.id : bedroomGroup.id;
+
+    console.time('loadPlaylist');
 
     try {
-      await loadPlaylist(access_token, roomId);
+      await loadPlaylist(access_token, roomId, playlistId);
     } catch (err) {
       const cause = err as VError;
       const info = VError.info(cause);
       ctx.body = { message: info.statusText };
       ctx.status = info.status;
+
+      console.error({ err });
+
       return;
     }
 
+    console.timeEnd('loadPlaylist');
+
+    console.time('setVolume');
     try {
       await setVolume(access_token, roomId);
     } catch (err) {
@@ -112,6 +124,8 @@ controlRouter.get(
       ctx.status = info.status;
       return;
     }
+
+    console.timeEnd('setVolume');
 
     ctx.body = { message: "successfully loaded playlist" };
   }
@@ -122,6 +136,8 @@ controlRouter.get(
   getAccessToken(),
   getRooms(),
   async (ctx) => {
+    console.time('getAccessToken');
+
     const {
       accessToken: {
         token: { access_token },
@@ -130,9 +146,12 @@ controlRouter.get(
       bedroomGroup,
     } = ctx.state;
 
+    console.timeEnd('getAccessToken');
+
     const { room, favoriteId } = ctx.params;
     const roomId = room === "LivingRoom" ? livingRoomGroup.id : bedroomGroup.id;
 
+    console.time('loadFavorite');
     try {
       await loadFavorite(access_token, roomId, favoriteId);
     } catch (err) {
@@ -143,6 +162,10 @@ controlRouter.get(
       return;
     }
 
+    console.timeEnd('loadFavorite');
+
+    console.time('setVolume');
+
     try {
       await setVolume(access_token, roomId);
     } catch (err) {
@@ -152,6 +175,8 @@ controlRouter.get(
       ctx.status = info.status;
       return;
     }
+
+    console.timeEnd('setVolume');
 
     ctx.body = { message: `successfully loaded favoriteId: ${favoriteId}` };
   }
