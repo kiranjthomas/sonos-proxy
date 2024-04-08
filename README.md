@@ -24,3 +24,19 @@ Requirements:
 [sonos api]: https://developer.sonos.com/reference/
 [authorize]: https://developer.sonos.com/build/direct-control/authorize/
 [control api]: https://developer.sonos.com/reference/control-api/
+
+## Redis Commands for Important Keys
+
+### Access / Refresh Tokens
+
+```sh
+dc exec redis redis-cli set accessToken "{\"access_token\": \"<insert-access-token>>\",\"token_type\": \"Bearer\",\"expires_in\": 86399,\"refresh_token\": \"<insert-refresh-token>>\",\"scope\": \"playback-control-all\"}"
+```
+
+### Household
+
+<https://docs.sonos.com/docs/seg-households>
+
+```sh
+dc exec redis redis-cli set householdsId "{\"householdsId\": \"Sonos_ADGZIALs7FnNsIeY7mpcxKxkr9.spbf2NRpJyAR5FV2L4Dz\"}"
+```
