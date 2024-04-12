@@ -16,7 +16,7 @@ export default function getAccessToken(): Koa.Middleware {
         console.log("Error refreshing access token: ", error);
       }
 
-      redisClient.set("accessToken", JSON.stringify(accessToken));
+      await redisClient.set("accessToken", JSON.stringify(accessToken));
     }
 
     ctx.state.accessToken = accessToken;
