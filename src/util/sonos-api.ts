@@ -79,7 +79,7 @@ export async function loadPlaylist(
     playlistId,
     playOnCompletion: true,
     action: "replace",
-    playModes: { shuffle: true },
+    playModes: { shuffle: false },
   };
 
   try {

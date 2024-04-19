@@ -27,10 +27,16 @@ Requirements:
 
 ## Redis Commands for Important Keys
 
-### Access / Refresh Tokens
+### Set Access / Refresh Tokens
 
 ```sh
-dc exec redis redis-cli set accessToken "{\"access_token\": \"<insert-access-token>>\",\"token_type\": \"Bearer\",\"expires_in\": 86399,\"refresh_token\": \"<insert-refresh-token>>\",\"scope\": \"playback-control-all\"}"
+dc \
+exec \
+redis \
+redis-cli \
+set \
+accessToken \
+"{\"access_token\": \"<insert-access-token>>\",\"token_type\": \"Bearer\",\"expires_in\": 86399,\"refresh_token\": \"<insert-refresh-token>>\",\"scope\": \"playback-control-all\",\"expires_at\":\"2024-04-20T21:46:56.154Z\"}"
 ```
 
 ### Household
@@ -38,5 +44,11 @@ dc exec redis redis-cli set accessToken "{\"access_token\": \"<insert-access-tok
 <https://docs.sonos.com/docs/seg-households>
 
 ```sh
-dc exec redis redis-cli set householdsId "{\"householdsId\": \"Sonos_ADGZIALs7FnNsIeY7mpcxKxkr9.spbf2NRpJyAR5FV2L4Dz\"}"
+dc \
+exec \
+redis \
+redis-cli \
+set \
+householdsId \
+"{\"householdsId\": \"<insert-house-hold-id>\"}"
 ```
