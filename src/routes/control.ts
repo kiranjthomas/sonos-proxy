@@ -13,9 +13,8 @@ import getAccessToken from "../middlewares/get-access-token";
 import getRooms from "../middlewares/get-rooms";
 
 export const controlRouter = new Router();
-// const redis = new Redis({ host: "redis" });
 
-controlRouter.get("/getGroups", getAccessToken(), async (ctx) => {
+controlRouter.post("/groupsCallback", getAccessToken(), async (ctx) => {
   const {
     accessToken: {
       token: { access_token },
@@ -45,10 +44,10 @@ controlRouter.get("/getGroups", getAccessToken(), async (ctx) => {
     redistClient.set(group.name, JSON.stringify(group))
   );
 
-  ctx.body = {
-    message: "successfully got groupId",
-    groups: result.data?.groups,
-  };
+  console.log("New groups stored in redis after sonos subscription callback: ", result.data?.groups);
+ 
+  ctx.body = "OK"
+  ctx.status = 200
 });
 
 controlRouter.get(

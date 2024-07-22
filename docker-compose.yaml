@@ -1,17 +1,16 @@
 version: "3.6"
 services:
-  sonos-proxy-caddy:
-    image: caddy:2.5.2-alpine
+  caddy:
+    image: caddy:2-alpine
     restart: always
     depends_on:
       - server
     ports:
       - "5000:5000"
-      - "3000:80"
+      - "4000:4000"
     volumes:
       - caddy_data:/data/caddy
       - "./Caddyfile:/etc/caddy/Caddyfile"
-      - ./build/www/sonos-client:/var/www/sonos-client
   redis:
     image: redis:4-alpine
     restart: always
@@ -41,6 +40,5 @@ volumes:
   caddy_data:
   redis_data:
 networks:
-  default:
-    external:
-      name: sonos-proxy
+  sonos-proxy:
+    external: true
