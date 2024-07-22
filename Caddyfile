@@ -12,10 +12,16 @@ localhost:5000 {
   reverse_proxy server:5001
 }
 
-http://192.168.86.238:4000 {
+http://localhost:4000 {
   import logging
 
-  reverse_proxy server:5001 {
+  @sonos-matcher {
+   method POST
+   header x-sonos-target-type householdId
+   header x-sonos-namespace groups
+  }
+
+  reverse_proxy @sonos-matcher server:5001 {
    rewrite /groupsCallback
   }
 }
