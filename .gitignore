@@ -1,5 +1,6 @@
 .terraform
 node_modules
 config/local.yaml
+config/default.yaml
 **/dist
 build
