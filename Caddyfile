@@ -1,27 +1,23 @@
 (logging) {
-    log {
-        output stdout
-    }
-}
-
-localhost:5000 {
-  import logging
-
-  tls internal
-
-  reverse_proxy server:5001
+	log {
+		output stdout
+	}
 }
 
 http://localhost:4000 {
-  import logging
+	import logging
 
-  @sonos-matcher {
-   method POST
-   header x-sonos-target-type householdId
-   header x-sonos-namespace groups
-  }
+	@sonos-matcher {
+		method POST
+		header x-sonos-target-type householdId
+		header x-sonos-namespace groups
+	}
 
-  reverse_proxy @sonos-matcher server:5001 {
-   rewrite /groupsCallback
-  }
+	route * {
+		reverse_proxy @sonos-matcher server:5001 {
+			rewrite /groupsCallback
+		}
+
+		respond "Bad Request" 400
+	}
 }
