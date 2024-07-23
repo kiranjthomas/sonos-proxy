@@ -25,6 +25,26 @@ Requirements:
 [authorize]: https://developer.sonos.com/build/direct-control/authorize/
 [control api]: https://developer.sonos.com/reference/control-api/
 
+## Docker
+
+My [Raspberry Pi](https://www.raspberrypi.com/products/raspberry-pi-3-model-b/) is unable to build the necessary image from the [Dockerfile](./Dockerfile) due to hardware constraints.
+
+At the moment, my workaround is to
+
+1. build the image with the platform argument on a system that is capable
+
+    ```sh
+    # To avoid platform mismatch issues, I build the image using the following command
+    docker build \
+    -t letmeupgradeya/sonos-proxy:server \
+    --platform linux/arm/v7 \
+    .
+    ```
+
+1. login to dockerhub via `docker login`
+1. push the image to dockerhub
+1. pull the image from Raspberry PI
+
 ## Redis Commands for Important Keys
 
 ### Set Access / Refresh Tokens
