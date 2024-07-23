@@ -8,13 +8,19 @@ import {
   loadPlaylist,
   loadFavorite,
   setVolume,
-} from "../util/sonos-api";
-import getAccessToken from "../middlewares/get-access-token";
-import getRooms from "../middlewares/get-rooms";
+} from "../util/sonos-control-api";
+import { isEventAuthentic } from "../util/sonos-event-api";
+import { getAccessToken, getRooms } from "../middlewares";
 
 export const controlRouter = new Router();
 
 controlRouter.post("/groupsCallback", async (ctx) => {
+  if (!isEventAuthentic(ctx.request.headers)) {
+    ctx.body = "Unauthorized";
+    ctx.status = 401;
+    return;
+  }
+
   const { groups } = <GroupData>ctx.request.body;
 
   // always make sure music plays after pi button makes loadPlayList/LivingRoom request

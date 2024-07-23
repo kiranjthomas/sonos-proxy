@@ -2,7 +2,7 @@ import type Koa from "koa";
 import client from "../clients/oauth";
 import redisClient from "../clients/redis";
 
-export default function getAccessToken(): Koa.Middleware {
+export function getAccessToken(): Koa.Middleware {
   return async (ctx, next): Promise<void> => {
     const accessTokenJSONString = (await redisClient.get("accessToken")) || "";
 
