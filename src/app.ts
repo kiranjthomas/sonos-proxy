@@ -2,6 +2,7 @@ import Koa from "koa";
 import cors from "@koa/cors";
 import serve from "koa-static";
 import mount from "koa-mount";
+import bodyParser from "@koa/bodyparser";
 
 import { oauthRouter, controlRouter, healthRouter } from "./routes";
 
