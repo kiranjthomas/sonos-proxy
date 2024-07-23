@@ -94,8 +94,9 @@ controlRouter.get(
     console.timeEnd("loadPlaylist");
 
     console.time("setVolume");
+
     try {
-      setVolume(access_token, roomId);
+      await setVolume(access_token, roomId);
     } catch (err) {
       const cause = err as VError;
       const info = VError.info(cause);
