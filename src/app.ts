@@ -9,6 +9,7 @@ import { oauthRouter, controlRouter, healthRouter } from "./routes";
 const app = new Koa();
 
 app.use(cors());
+app.use(bodyParser());
 
 console.log(`${__dirname}`);
 app.use(mount("/", serve(__dirname + "/sonos-client")));

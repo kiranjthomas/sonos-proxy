@@ -19,11 +19,12 @@ interface PostData {
   volume?: string;
 }
 
-interface GroupData {
+export interface GroupData {
   groups: Group[];
   players: Player[];
   partial: boolean;
 }
+
 interface Group {
   id: string;
   name: string;

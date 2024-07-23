@@ -1,51 +1,32 @@
 import Router from "koa-router";
 import VError from "verror";
 
-import redistClient from "../clients/redis";
+import redisClient from "../clients/redis";
 import {
   playPauseSonos,
   loadPlaylist,
   loadFavorite,
   getGroups,
   setVolume,
+  GroupData,
 } from "../util/sonos-api";
 import getAccessToken from "../middlewares/get-access-token";
 import getRooms from "../middlewares/get-rooms";
 
 export const controlRouter = new Router();
 
-controlRouter.post("/groupsCallback", getAccessToken(), async (ctx) => {
-  const {
-    accessToken: {
-      token: { access_token },
-    },
-  } = ctx.state;
+controlRouter.post("/groupsCallback", async (ctx) => {
+  const { groups } = <GroupData>ctx.request.body;
+  console.log({groups});
 
-  const { householdsId } = JSON.parse(
-    (await redistClient.get("householdsId")) || ""
-  );
-
-  let result;
-  try {
-    result = await getGroups(access_token, householdsId);
-  } catch (err) {
-    const cause = err as VError;
-    const info = VError.info(cause);
-    ctx.body = info.statusText;
-    ctx.status = info.status;
-    return;
+  // always make sure music plays after button requets loadPlayList/LivingRoom
+  if (groups.length === 1) {
+   await redisClient.set("Living Room", JSON.stringify(groups[0]))
+}
+  for (const group of groups) {
+    await redisClient.set(group.name, JSON.stringify(group))
   }
 
-  const {
-    data: { groups },
-  } = result;
-
-  groups.forEach((group) =>
-    redistClient.set(group.name, JSON.stringify(group))
-  );
-
-  console.log("New groups stored in redis after sonos subscription callback: ", result.data?.groups);
- 
   ctx.body = "OK"
   ctx.status = 200
 });
