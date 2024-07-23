@@ -44,6 +44,7 @@ At the moment, my workaround is to
 1. login to dockerhub via `docker login`
 1. push the image to dockerhub
 1. pull the image from Raspberry PI
+1. run `docker compose up -d`
 
 ## Redis Commands for Important Keys
 
