@@ -3,12 +3,11 @@ import VError from "verror";
 
 import redisClient from "../clients/redis";
 import {
+  GroupData,
   playPauseSonos,
   loadPlaylist,
   loadFavorite,
-  getGroups,
   setVolume,
-  GroupData,
 } from "../util/sonos-api";
 import getAccessToken from "../middlewares/get-access-token";
 import getRooms from "../middlewares/get-rooms";
@@ -17,18 +16,18 @@ export const controlRouter = new Router();
 
 controlRouter.post("/groupsCallback", async (ctx) => {
   const { groups } = <GroupData>ctx.request.body;
-  console.log({groups});
+  console.log({ groups });
 
-  // always make sure music plays after button requets loadPlayList/LivingRoom
+  // always make sure music plays after pi button makes loadPlayList/LivingRoom request
   if (groups.length === 1) {
-   await redisClient.set("Living Room", JSON.stringify(groups[0]))
-}
+    await redisClient.set("Living Room", JSON.stringify(groups[0]));
+  }
   for (const group of groups) {
-    await redisClient.set(group.name, JSON.stringify(group))
+    await redisClient.set(group.name, JSON.stringify(group));
   }
 
-  ctx.body = "OK"
-  ctx.status = 200
+  ctx.body = "OK";
+  ctx.status = 200;
 });
 
 controlRouter.get(
@@ -62,7 +61,7 @@ controlRouter.get(
   getAccessToken(),
   getRooms(),
   async (ctx) => {
-    console.time('getAccessToken');
+    console.time("getAccessToken");
 
     const {
       accessToken: {
@@ -72,12 +71,12 @@ controlRouter.get(
       bedroomGroup,
     } = ctx.state;
 
-    console.timeEnd('getAccessToken');
+    console.timeEnd("getAccessToken");
 
     const { room, playlistId } = ctx.params;
     const roomId = room === "LivingRoom" ? livingRoomGroup.id : bedroomGroup.id;
 
-    console.time('loadPlaylist');
+    console.time("loadPlaylist");
 
     try {
       await loadPlaylist(access_token, roomId, playlistId);
@@ -92,9 +91,9 @@ controlRouter.get(
       return;
     }
 
-    console.timeEnd('loadPlaylist');
+    console.timeEnd("loadPlaylist");
 
-    console.time('setVolume');
+    console.time("setVolume");
     try {
       setVolume(access_token, roomId);
     } catch (err) {
@@ -105,7 +104,7 @@ controlRouter.get(
       return;
     }
 
-    console.timeEnd('setVolume');
+    console.timeEnd("setVolume");
 
     ctx.body = { message: "successfully loaded playlist" };
   }
@@ -116,7 +115,7 @@ controlRouter.get(
   getAccessToken(),
   getRooms(),
   async (ctx) => {
-    console.time('getAccessToken');
+    console.time("getAccessToken");
 
     const {
       accessToken: {
@@ -126,12 +125,12 @@ controlRouter.get(
       bedroomGroup,
     } = ctx.state;
 
-    console.timeEnd('getAccessToken');
+    console.timeEnd("getAccessToken");
 
     const { room, favoriteId } = ctx.params;
     const roomId = room === "LivingRoom" ? livingRoomGroup.id : bedroomGroup.id;
 
-    console.time('loadFavorite');
+    console.time("loadFavorite");
     try {
       await loadFavorite(access_token, roomId, favoriteId);
     } catch (err) {
@@ -142,9 +141,9 @@ controlRouter.get(
       return;
     }
 
-    console.timeEnd('loadFavorite');
+    console.timeEnd("loadFavorite");
 
-    console.time('setVolume');
+    console.time("setVolume");
 
     try {
       await setVolume(access_token, roomId);
@@ -156,7 +155,7 @@ controlRouter.get(
       return;
     }
 
-    console.timeEnd('setVolume');
+    console.timeEnd("setVolume");
 
     ctx.body = { message: `successfully loaded favoriteId: ${favoriteId}` };
   }
