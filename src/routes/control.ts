@@ -16,12 +16,12 @@ export const controlRouter = new Router();
 
 controlRouter.post("/groupsCallback", async (ctx) => {
   const { groups } = <GroupData>ctx.request.body;
-  console.log({ groups });
 
   // always make sure music plays after pi button makes loadPlayList/LivingRoom request
   if (groups.length === 1) {
     await redisClient.set("Living Room", JSON.stringify(groups[0]));
   }
+
   for (const group of groups) {
     await redisClient.set(group.name, JSON.stringify(group));
   }
