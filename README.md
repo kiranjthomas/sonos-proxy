@@ -18,7 +18,7 @@ Sonos leverages three legged oauth to [authorize] requests.
 
 Requirements:
 
-- Node.js >= 12
+- Node.js >= 14
 - Docker
 
 [sonos api]: https://developer.sonos.com/reference/
