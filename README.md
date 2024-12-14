@@ -33,6 +33,10 @@ To mitigate, I found a `subscribe` endpoint under the `groups` namespace. See ht
 
 Unfortunately, I believe the subscription will expire if no events are sent in a certain amount of time. This will require re-subscribing to the `subscribe` endpoint.
 
+#### Leverage Cloudflared Tunnels
+
+The callback URL leverages Cloudflare Tunnels. See one.dash.cloudflare.com and navigate to Networks/Tunnels.
+
 ## Docker
 
 My [Raspberry Pi](https://www.raspberrypi.com/products/raspberry-pi-3-model-b/) is unable to build the necessary image from the [Dockerfile](./Dockerfile) due to hardware constraints.
