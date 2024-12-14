@@ -25,6 +25,14 @@ Requirements:
 [authorize]: https://developer.sonos.com/build/direct-control/authorize/
 [control api]: https://developer.sonos.com/reference/control-api/
 
+### Group Subscriptions
+
+Anytime I group Sonos players together (e.g. group Living Room and Bedroom), the Id of the players can change. This often led to manually setting the group IDs in redis.
+
+To mitigate, I found a `subscribe` endpoint under the `groups` namespace. See https://docs.sonos.com/reference/groups-subscribe-householdid#tag/playback/operation/Playback-LoadContent-GroupId. This endpoint leverages the `Event Callback URL` set for the API key in the integration setup in the Sonos Control Integration portal. See https://integration.sonos.com/integrations. At the moment, events are sent to the `/groupsCallback` endpoint here https://github.com/kiranjthomas/sonos-proxy/blob/main/src/routes/control.ts#L17
+
+Unfortunately, I believe the subscription will expire if no events are sent in a certain amount of time. This will require re-subscribing to the `subscribe` endpoint.
+
 ## Docker
 
 My [Raspberry Pi](https://www.raspberrypi.com/products/raspberry-pi-3-model-b/) is unable to build the necessary image from the [Dockerfile](./Dockerfile) due to hardware constraints.
