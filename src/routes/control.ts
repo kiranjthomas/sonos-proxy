@@ -37,6 +37,14 @@ controlRouter.post("/groupsCallback", async (ctx) => {
 });
 
 controlRouter.get(
+  "/refreshAccessToken",
+  getAccessToken(),
+  async (ctx) => {
+    ctx.body = { message: "refreshed access token" };
+  }
+);
+
+controlRouter.get(
   "/togglePlayPause",
   getAccessToken(),
   getRooms(),
